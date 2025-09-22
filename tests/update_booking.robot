@@ -1,88 +1,104 @@
 *** Settings ***
-Documentation    Testes da API Restful-Booker
+Documentation    Update Booking Tests
 Library          RequestsLibrary
 Library          Collections
 
-Suite Setup      Create Session    booking_api    https://restful-booker.herokuapp.com
+Suite Setup      Create Session    api    https://restful-booker.herokuapp.com
 Suite Teardown   Delete All Sessions
 
 *** Variables ***
-${BOOKING_ENDPOINT}    /booking
-${AUTH_ENDPOINT}       /auth
+${ENDPOINT}    /booking
+${AUTH_ENDPOINT}    /auth
 
 *** Test Cases ***
-Criar E Validar Booking
-    [Documentation]    Cria um booking e valida os campos principais
+Update Booking
+    [Tags]    update    positive
+    ${booking_id}=    Create Test Booking
+    ${token}=    Get Auth Token
+    ${headers}=    Create Dictionary    Cookie=token=${token}
     
-    ${body}=    Create Dictionary
-    ...    firstname    James
-    ...    lastname     Brown
-    ...    totalprice   111
-    ...    depositpaid  ${True}
-    ...    additionalneeds    Breakfast
+    ${update_data}=    Create Update Data    Updated    Name    200
+    ${response}=    PUT On Session    api    ${ENDPOINT}/${booking_id}    json=${update_data}    headers=${headers}
+    Should Be Equal As Numbers    ${response.status_code}    200
     
-    ${dates}=    Create Dictionary
-    ...    checkin    2018-01-01
-    ...    checkout   2019-01-01
-    
-    Set To Dictionary    ${body}    bookingdates    ${dates}
-    
-    ${response}=    POST On Session    booking_api    ${BOOKING_ENDPOINT}
-    ...    json=${body}
-    ...    expected_status=200
-    
-    Log To Console    Booking criado: ${response.json()}
-    
-    ${booking_id}=    Set Variable    ${response.json()['bookingid']}
-    Set Suite Variable    ${BOOKING_ID}    ${booking_id}
-    
-    Dictionary Should Contain Key    ${response.json()}    bookingid
-    Dictionary Should Contain Key    ${response.json()}    booking
-    Should Be Equal    ${response.json()['booking']['firstname']}    James
-    Should Be Equal    ${response.json()['booking']['lastname']}     Brown
-    Should Be Equal As Numbers    ${response.json()['booking']['totalprice']}    111
-    Should Be Equal    ${response.json()['booking']['additionalneeds']}    Breakfast
+    Should Be Equal    ${response.json()['firstname']}    Updated
+    Should Be Equal    ${response.json()['lastname']}    Name
+    Should Be Equal As Numbers    ${response.json()['totalprice']}    200
 
-Buscar Booking Por ID
-    [Documentation]    Busca um booking específico por ID e valida os dados
+Partial Update Booking
+    [Tags]    update    positive
+    ${booking_id}=    Create Test Booking
+    ${token}=    Get Auth Token
+    ${headers}=    Create Dictionary    Cookie=token=${token}
     
-    ${response}=    GET On Session    booking_api    ${BOOKING_ENDPOINT}/${BOOKING_ID}
-    ...    expected_status=200
+    ${patch_data}=    Create Dictionary    firstname=Patched    totalprice=150
+    ${response}=    PATCH On Session    api    ${ENDPOINT}/${booking_id}    json=${patch_data}    headers=${headers}
+    Should Be Equal As Numbers    ${response.status_code}    200
     
-    Log To Console    Booking encontrado: ${response.json()}
-    
-    Should Be Equal    ${response.json()['firstname']}    James
-    Should Be Equal    ${response.json()['lastname']}     Brown
-    Should Be Equal As Numbers    ${response.json()['totalprice']}    111
-    Should Be Equal    ${response.json()['additionalneeds']}    Breakfast
-    Should Be Equal    ${response.json()['bookingdates']['checkin']}    2018-01-01
-    Should Be Equal    ${response.json()['bookingdates']['checkout']}    2019-01-01
+    Should Be Equal    ${response.json()['firstname']}    Patched
+    Should Be Equal As Numbers    ${response.json()['totalprice']}    150
 
-Listar Todos Os Bookings
-    [Documentation]    Lista todos os bookings e verifica se o booking criado está na lista
+Update Without Auth
+    [Tags]    update    negative
+    ${booking_id}=    Create Test Booking
+    ${update_data}=    Create Update Data    Test    User    100
     
-    ${response}=    GET On Session    booking_api    ${BOOKING_ENDPOINT}
-    ...    expected_status=200
+    ${response}=    PUT On Session    api    ${ENDPOINT}/${booking_id}    json=${update_data}    expected_status=any
+    Should Be Equal As Numbers    ${response.status_code}    403
+
+Update Invalid Booking
+    [Tags]    update    negative
+    ${token}=    Get Auth Token
+    ${headers}=    Create Dictionary    Cookie=token=${token}
+    ${update_data}=    Create Update Data    Test    User    100
     
-    Log To Console    Total de bookings: ${len(${response.json()})}
+    ${response}=    PUT On Session    api    ${ENDPOINT}/999999    json=${update_data}    headers=${headers}    expected_status=any
+    Should Be Equal As Numbers    ${response.status_code}    405
+
+Update With Invalid Token
+    [Tags]    update    negative
+    ${booking_id}=    Create Test Booking
+    ${headers}=    Create Dictionary    Cookie=token=invalid
+    ${update_data}=    Create Update Data    Test    User    100
     
-    ${booking_ids}=    Create List
-    FOR    ${booking}    IN    @{response.json()}
-        Append To List    ${booking_ids}    ${booking['bookingid']}
-    END
+    ${response}=    PUT On Session    api    ${ENDPOINT}/${booking_id}    json=${update_data}    headers=${headers}    expected_status=any
+    Should Be Equal As Numbers    ${response.status_code}    403
+
+Update With Invalid Data
+    [Tags]    update    negative
+    ${booking_id}=    Create Test Booking
+    ${token}=    Get Auth Token
+    ${headers}=    Create Dictionary    Cookie=token=${token}
     
-    List Should Contain Value    ${booking_ids}    ${BOOKING_ID}
-    Should Not Be Empty    ${response.json()}
+    ${invalid_data}=    Create Dictionary    firstname=Test
+    ${response}=    PUT On Session    api    ${ENDPOINT}/${booking_id}    json=${invalid_data}    headers=${headers}    expected_status=any
+    Should Be True    ${response.status_code} >= 400
 
 *** Keywords ***
-Criar Token de Autenticação
-    [Documentation]    Cria um token de autenticação para operações que requerem auth
-    ${auth_body}=    Create Dictionary
-    ...    username    admin
-    ...    password    password123
+Create Test Booking
+    ${dates}=    Create Dictionary    checkin=2024-01-15    checkout=2024-01-20
+    ${data}=    Create Dictionary
+    ...    firstname=Test
+    ...    lastname=User
+    ...    totalprice=100
+    ...    depositpaid=${True}
+    ...    bookingdates=${dates}
     
-    ${response}=    POST On Session    booking_api    ${AUTH_ENDPOINT}
-    ...    json=${auth_body}
-    ...    expected_status=200
-    
-    [Return]    ${response.json()['token']}
+    ${response}=    POST On Session    api    ${ENDPOINT}    json=${data}
+    [Return]    ${response.json()['bookingid']}
+
+Create Update Data
+    [Arguments]    ${firstname}    ${lastname}    ${price}
+    ${dates}=    Create Dictionary    checkin=2024-02-01    checkout=2024-02-05
+    ${data}=    Create Dictionary
+    ...    firstname=${firstname}
+    ...    lastname=${lastname}
+    ...    totalprice=${price}
+    ...    depositpaid=${False}
+    ...    bookingdates=${dates}
+    [Return]    ${data}
+
+Get Auth Token
+    ${auth_data}=    Create Dictionary    username=admin    password=password123
+    ${response}=    POST On Session    api    ${AUTH_ENDPOINT}    json=${auth_data}
+
