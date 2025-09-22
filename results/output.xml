@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.12.7 on win32)" generated="2025-09-22T15:14:06.768398" rpa="false" schemaversion="5">
+<suite id="s1" name="Delete Booking" source="C:\Users\raphael\Documents\GitHub\learn\Compass\Test_heroku_robot_Framerwork\tests\delete_booking.robot">
+<kw name="Create Session" owner="RequestsLibrary" type="SETUP">
+<msg time="2025-09-22T15:14:07.072556" level="INFO">Creating Session using : alias=api, url=https://restful-booker.herokuapp.com, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>api</arg>
+<arg>https://restful-booker.herokuapp.com</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-09-22T15:14:07.072556" elapsed="0.000000"/>
+</kw>
+<test id="s1-t1" name="Delete Booking" line="14">
+<kw name="Create Test Booking">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:07.073632" level="INFO">${dates} = {'checkin': '2024-01-15', 'checkout': '2024-01-20'}</msg>
+<var>${dates}</var>
+<arg>checkin=2024-01-15</arg>
+<arg>checkout=2024-01-20</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.073632" elapsed="0.000000"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:07.074987" level="INFO">${data} = {'firstname': 'Test', 'lastname': 'User', 'totalprice': '100', 'depositpaid': True, 'bookingdates': {'checkin': '2024-01-15', 'checkout': '2024-01-20'}}</msg>
+<var>${data}</var>
+<arg>firstname=Test</arg>
+<arg>lastname=User</arg>
+<arg>totalprice=100</arg>
+<arg>depositpaid=${True}</arg>
+<arg>bookingdates=${dates}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.073632" elapsed="0.001355"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:07.787638" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/booking 
+ path_url=/booking 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '152', 'Content-Type': 'application/json'} 
+ body=b'{"firstname": "Test", "lastname": "User", "totalprice": "100", "depositpaid": true, "bookingdates": {"checkin": "2024-01-15", "checkout": "2024-01-20"}}' 
+ </msg>
+<msg time="2025-09-22T15:14:07.787638" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/booking 
+ status=200, reason=OK 
+ headers={'Content-Length': '167', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"a7-EbsGyM/RCuON1mzEGTwHjxxL0dE"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"bookingid":1698,"booking":{"firstname":"Test","lastname":"User","totalprice":100,"depositpaid":true,"bookingdates":{"checkin":"2024-01-15","checkout":"2024-01-20"}}} 
+ </msg>
+<msg time="2025-09-22T15:14:07.787638" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:07.788700" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}</arg>
+<arg>json=${data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.074987" elapsed="0.713713"/>
+</kw>
+<return>
+<value>${response.json()['bookingid']}</value>
+<status status="PASS" start="2025-09-22T15:14:07.789109" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:07.789109" level="INFO">${booking_id} = 1698</msg>
+<var>${booking_id}</var>
+<status status="PASS" start="2025-09-22T15:14:07.073632" elapsed="0.715477"/>
+</kw>
+<kw name="Get Auth Token">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:07.790194" level="INFO">${auth_data} = {'username': 'admin', 'password': 'password123'}</msg>
+<var>${auth_data}</var>
+<arg>username=admin</arg>
+<arg>password=password123</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.790194" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:07.898181" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/auth 
+ path_url=/auth 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '48', 'Content-Type': 'application/json'} 
+ body=b'{"username": "admin", "password": "password123"}' 
+ </msg>
+<msg time="2025-09-22T15:14:07.899166" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/auth 
+ status=200, reason=OK 
+ headers={'Content-Length': '27', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"1b-cMyuZRuo4nvhqP8nR798e0uRoR0"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"token":"6572822273a5fb7"} 
+ </msg>
+<msg time="2025-09-22T15:14:07.899166" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:07.899166" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${AUTH_ENDPOINT}</arg>
+<arg>json=${auth_data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.790194" elapsed="0.108972"/>
+</kw>
+<return>
+<value>${response.json()['token']}</value>
+<status status="PASS" start="2025-09-22T15:14:07.899166" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:07.900168" level="INFO">${token} = 6572822273a5fb7</msg>
+<var>${token}</var>
+<status status="PASS" start="2025-09-22T15:14:07.790194" elapsed="0.109974"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:07.900168" level="INFO">${headers} = {'Cookie': 'token=6572822273a5fb7'}</msg>
+<var>${headers}</var>
+<arg>Cookie=token=${token}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.900168" elapsed="0.000000"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.011367" level="INFO">DELETE Request : url=https://restful-booker.herokuapp.com/booking/1698 
+ path_url=/booking/1698 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=6572822273a5fb7', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:08.011367" level="INFO">DELETE Response : url=https://restful-booker.herokuapp.com/booking/1698 
+ status=201, reason=Created 
+ headers={'Content-Length': '7', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"7-rM9AyJuqT6iOan/xHh+AW+7K/T8"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Created 
+ </msg>
+<msg time="2025-09-22T15:14:08.011367" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.012566" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}/${booking_id}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:07.900168" elapsed="0.112398"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.012807" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.012807" elapsed="0.000000"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.122165" level="INFO">GET Request : url=https://restful-booker.herokuapp.com/booking/1698 
+ path_url=/booking/1698 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:08.122165" level="INFO">GET Response : url=https://restful-booker.herokuapp.com/booking/1698 
+ status=404, reason=Not Found 
+ headers={'Content-Length': '9', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"9-0gXL1ngzMqISxa6S1zx3F4wtLyg"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Not Found 
+ </msg>
+<msg time="2025-09-22T15:14:08.122165" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.123369" level="INFO">${response} = &lt;Response [404]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}/${booking_id}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.012807" elapsed="0.110562"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.124308" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>404</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.123369" elapsed="0.000939"/>
+</kw>
+<tag>delete</tag>
+<tag>positive</tag>
+<status status="PASS" start="2025-09-22T15:14:07.073632" elapsed="1.050676"/>
+</test>
+<test id="s1-t2" name="Delete Without Auth" line="27">
+<kw name="Create Test Booking">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.126308" level="INFO">${dates} = {'checkin': '2024-01-15', 'checkout': '2024-01-20'}</msg>
+<var>${dates}</var>
+<arg>checkin=2024-01-15</arg>
+<arg>checkout=2024-01-20</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.125301" elapsed="0.001007"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.126308" level="INFO">${data} = {'firstname': 'Test', 'lastname': 'User', 'totalprice': '100', 'depositpaid': True, 'bookingdates': {'checkin': '2024-01-15', 'checkout': '2024-01-20'}}</msg>
+<var>${data}</var>
+<arg>firstname=Test</arg>
+<arg>lastname=User</arg>
+<arg>totalprice=100</arg>
+<arg>depositpaid=${True}</arg>
+<arg>bookingdates=${dates}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.126308" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.226924" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/booking 
+ path_url=/booking 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '152', 'Content-Type': 'application/json'} 
+ body=b'{"firstname": "Test", "lastname": "User", "totalprice": "100", "depositpaid": true, "bookingdates": {"checkin": "2024-01-15", "checkout": "2024-01-20"}}' 
+ </msg>
+<msg time="2025-09-22T15:14:08.226924" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/booking 
+ status=200, reason=OK 
+ headers={'Content-Length': '167', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"a7-kiBZh/GaClr76dRXzQGZNcBRl1g"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"bookingid":1700,"booking":{"firstname":"Test","lastname":"User","totalprice":100,"depositpaid":true,"bookingdates":{"checkin":"2024-01-15","checkout":"2024-01-20"}}} 
+ </msg>
+<msg time="2025-09-22T15:14:08.226924" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.226924" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}</arg>
+<arg>json=${data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.126308" elapsed="0.100616"/>
+</kw>
+<return>
+<value>${response.json()['bookingid']}</value>
+<status status="PASS" start="2025-09-22T15:14:08.226924" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:08.226924" level="INFO">${booking_id} = 1700</msg>
+<var>${booking_id}</var>
+<status status="PASS" start="2025-09-22T15:14:08.125301" elapsed="0.101623"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.349418" level="INFO">DELETE Request : url=https://restful-booker.herokuapp.com/booking/1700 
+ path_url=/booking/1700 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:08.349418" level="INFO">DELETE Response : url=https://restful-booker.herokuapp.com/booking/1700 
+ status=403, reason=Forbidden 
+ headers={'Content-Length': '9', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"9-PatfYBLj4Um1qTm5zrukoLhNyPU"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Forbidden 
+ </msg>
+<msg time="2025-09-22T15:14:08.349418" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.350427" level="INFO">${response} = &lt;Response [403]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}/${booking_id}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.226924" elapsed="0.123503"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.350427" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>403</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.350427" elapsed="0.000000"/>
+</kw>
+<tag>delete</tag>
+<tag>negative</tag>
+<status status="PASS" start="2025-09-22T15:14:08.125301" elapsed="0.225126"/>
+</test>
+<test id="s1-t3" name="Delete Invalid Booking" line="34">
+<kw name="Get Auth Token">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.351427" level="INFO">${auth_data} = {'username': 'admin', 'password': 'password123'}</msg>
+<var>${auth_data}</var>
+<arg>username=admin</arg>
+<arg>password=password123</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.351427" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.449149" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/auth 
+ path_url=/auth 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '48', 'Content-Type': 'application/json'} 
+ body=b'{"username": "admin", "password": "password123"}' 
+ </msg>
+<msg time="2025-09-22T15:14:08.449149" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/auth 
+ status=200, reason=OK 
+ headers={'Content-Length': '27', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"1b-3wQTQoG/V3PMJCvemmS223csjak"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"token":"b2ae3acc8d9aeae"} 
+ </msg>
+<msg time="2025-09-22T15:14:08.449149" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.449149" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${AUTH_ENDPOINT}</arg>
+<arg>json=${auth_data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.351427" elapsed="0.097722"/>
+</kw>
+<return>
+<value>${response.json()['token']}</value>
+<status status="PASS" start="2025-09-22T15:14:08.449149" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:08.449149" level="INFO">${token} = b2ae3acc8d9aeae</msg>
+<var>${token}</var>
+<status status="PASS" start="2025-09-22T15:14:08.351427" elapsed="0.097722"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.449149" level="INFO">${headers} = {'Cookie': 'token=b2ae3acc8d9aeae'}</msg>
+<var>${headers}</var>
+<arg>Cookie=token=${token}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.449149" elapsed="0.000000"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.571169" level="INFO">DELETE Request : url=https://restful-booker.herokuapp.com/booking/999999 
+ path_url=/booking/999999 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=b2ae3acc8d9aeae', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:08.571169" level="INFO">DELETE Response : url=https://restful-booker.herokuapp.com/booking/999999 
+ status=405, reason=Method Not Allowed 
+ headers={'Content-Length': '18', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:08 GMT', 'Etag': 'W/"12-UGJMK66P4abaBlq0vKHJaCKuGCA"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564848"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=PIT29sL8lOZuNwG7q8GW7IDdDaDpz5sOJ17A5L5x7r8%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564848"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Method Not Allowed 
+ </msg>
+<msg time="2025-09-22T15:14:08.571169" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.572071" level="INFO">${response} = &lt;Response [405]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}/999999</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.449149" elapsed="0.122922"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.572071" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>405</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.572071" elapsed="0.000000"/>
+</kw>
+<tag>delete</tag>
+<tag>negative</tag>
+<status status="PASS" start="2025-09-22T15:14:08.351427" elapsed="0.221659"/>
+</test>
+<test id="s1-t4" name="Delete With Invalid Token" line="42">
+<kw name="Create Test Booking">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.573633" level="INFO">${dates} = {'checkin': '2024-01-15', 'checkout': '2024-01-20'}</msg>
+<var>${dates}</var>
+<arg>checkin=2024-01-15</arg>
+<arg>checkout=2024-01-20</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.573633" elapsed="0.000000"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.573633" level="INFO">${data} = {'firstname': 'Test', 'lastname': 'User', 'totalprice': '100', 'depositpaid': True, 'bookingdates': {'checkin': '2024-01-15', 'checkout': '2024-01-20'}}</msg>
+<var>${data}</var>
+<arg>firstname=Test</arg>
+<arg>lastname=User</arg>
+<arg>totalprice=100</arg>
+<arg>depositpaid=${True}</arg>
+<arg>bookingdates=${dates}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.573633" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.682921" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/booking 
+ path_url=/booking 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '152', 'Content-Type': 'application/json'} 
+ body=b'{"firstname": "Test", "lastname": "User", "totalprice": "100", "depositpaid": true, "bookingdates": {"checkin": "2024-01-15", "checkout": "2024-01-20"}}' 
+ </msg>
+<msg time="2025-09-22T15:14:08.682921" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/booking 
+ status=200, reason=OK 
+ headers={'Content-Length': '167', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:09 GMT', 'Etag': 'W/"a7-hvJnvLCjOhCiHSjaysysn/ub0PU"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564849"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564849"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"bookingid":1703,"booking":{"firstname":"Test","lastname":"User","totalprice":100,"depositpaid":true,"bookingdates":{"checkin":"2024-01-15","checkout":"2024-01-20"}}} 
+ </msg>
+<msg time="2025-09-22T15:14:08.682921" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.683928" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}</arg>
+<arg>json=${data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.573633" elapsed="0.110295"/>
+</kw>
+<return>
+<value>${response.json()['bookingid']}</value>
+<status status="PASS" start="2025-09-22T15:14:08.683928" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:08.683928" level="INFO">${booking_id} = 1703</msg>
+<var>${booking_id}</var>
+<status status="PASS" start="2025-09-22T15:14:08.573633" elapsed="0.111135"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.684768" level="INFO">${headers} = {'Cookie': 'token=invalid'}</msg>
+<var>${headers}</var>
+<arg>Cookie=token=invalid</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.684768" elapsed="0.000000"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.782483" level="INFO">DELETE Request : url=https://restful-booker.herokuapp.com/booking/1703 
+ path_url=/booking/1703 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=invalid', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:08.782483" level="INFO">DELETE Response : url=https://restful-booker.herokuapp.com/booking/1703 
+ status=403, reason=Forbidden 
+ headers={'Content-Length': '9', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:09 GMT', 'Etag': 'W/"9-PatfYBLj4Um1qTm5zrukoLhNyPU"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564849"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564849"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Forbidden 
+ </msg>
+<msg time="2025-09-22T15:14:08.782483" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.782483" level="INFO">${response} = &lt;Response [403]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}/${booking_id}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.684768" elapsed="0.097715"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.782483" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>403</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.782483" elapsed="0.000000"/>
+</kw>
+<tag>delete</tag>
+<tag>negative</tag>
+<status status="PASS" start="2025-09-22T15:14:08.573633" elapsed="0.208850"/>
+</test>
+<test id="s1-t5" name="Delete Already Deleted Booking" line="50">
+<kw name="Create Test Booking">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.782483" level="INFO">${dates} = {'checkin': '2024-01-15', 'checkout': '2024-01-20'}</msg>
+<var>${dates}</var>
+<arg>checkin=2024-01-15</arg>
+<arg>checkout=2024-01-20</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.782483" elapsed="0.000000"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.782483" level="INFO">${data} = {'firstname': 'Test', 'lastname': 'User', 'totalprice': '100', 'depositpaid': True, 'bookingdates': {'checkin': '2024-01-15', 'checkout': '2024-01-20'}}</msg>
+<var>${data}</var>
+<arg>firstname=Test</arg>
+<arg>lastname=User</arg>
+<arg>totalprice=100</arg>
+<arg>depositpaid=${True}</arg>
+<arg>bookingdates=${dates}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.782483" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:08.900343" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/booking 
+ path_url=/booking 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '152', 'Content-Type': 'application/json'} 
+ body=b'{"firstname": "Test", "lastname": "User", "totalprice": "100", "depositpaid": true, "bookingdates": {"checkin": "2024-01-15", "checkout": "2024-01-20"}}' 
+ </msg>
+<msg time="2025-09-22T15:14:08.900343" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/booking 
+ status=200, reason=OK 
+ headers={'Content-Length': '167', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:09 GMT', 'Etag': 'W/"a7-WP+NQoQgmBTzDwbmX0NPKbE5Nng"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564849"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564849"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"bookingid":1705,"booking":{"firstname":"Test","lastname":"User","totalprice":100,"depositpaid":true,"bookingdates":{"checkin":"2024-01-15","checkout":"2024-01-20"}}} 
+ </msg>
+<msg time="2025-09-22T15:14:08.900343" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:08.900343" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}</arg>
+<arg>json=${data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.782483" elapsed="0.117860"/>
+</kw>
+<return>
+<value>${response.json()['bookingid']}</value>
+<status status="PASS" start="2025-09-22T15:14:08.900343" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:08.900343" level="INFO">${booking_id} = 1705</msg>
+<var>${booking_id}</var>
+<status status="PASS" start="2025-09-22T15:14:08.782483" elapsed="0.117860"/>
+</kw>
+<kw name="Get Auth Token">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:08.900343" level="INFO">${auth_data} = {'username': 'admin', 'password': 'password123'}</msg>
+<var>${auth_data}</var>
+<arg>username=admin</arg>
+<arg>password=password123</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.900343" elapsed="0.000000"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:09.011401" level="INFO">POST Request : url=https://restful-booker.herokuapp.com/auth 
+ path_url=/auth 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '48', 'Content-Type': 'application/json'} 
+ body=b'{"username": "admin", "password": "password123"}' 
+ </msg>
+<msg time="2025-09-22T15:14:09.011401" level="INFO">POST Response : url=https://restful-booker.herokuapp.com/auth 
+ status=200, reason=OK 
+ headers={'Content-Length': '27', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:09 GMT', 'Etag': 'W/"1b-vAYFpbJo850VvzLpXi3T6IqA0rE"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564849"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564849"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body={"token":"2948bdf3fb2aa79"} 
+ </msg>
+<msg time="2025-09-22T15:14:09.011401" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:09.012458" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${AUTH_ENDPOINT}</arg>
+<arg>json=${auth_data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:08.900343" elapsed="0.112115"/>
+</kw>
+<return>
+<value>${response.json()['token']}</value>
+<status status="PASS" start="2025-09-22T15:14:09.012458" elapsed="0.000000"/>
+</return>
+<msg time="2025-09-22T15:14:09.012458" level="INFO">${token} = 2948bdf3fb2aa79</msg>
+<var>${token}</var>
+<status status="PASS" start="2025-09-22T15:14:08.900343" elapsed="0.112115"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-09-22T15:14:09.013318" level="INFO">${headers} = {'Cookie': 'token=2948bdf3fb2aa79'}</msg>
+<var>${headers}</var>
+<arg>Cookie=token=${token}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-09-22T15:14:09.013318" elapsed="0.000000"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:09.119901" level="INFO">DELETE Request : url=https://restful-booker.herokuapp.com/booking/1705 
+ path_url=/booking/1705 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=2948bdf3fb2aa79', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:09.119901" level="INFO">DELETE Response : url=https://restful-booker.herokuapp.com/booking/1705 
+ status=201, reason=Created 
+ headers={'Content-Length': '7', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:09 GMT', 'Etag': 'W/"7-rM9AyJuqT6iOan/xHh+AW+7K/T8"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564849"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564849"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Created 
+ </msg>
+<msg time="2025-09-22T15:14:09.119901" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<arg>api</arg>
+<arg>${ENDPOINT}/${booking_id}</arg>
+<arg>headers=${headers}</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:09.013825" elapsed="0.106076"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-09-22T15:14:09.230542" level="INFO">DELETE Request : url=https://restful-booker.herokuapp.com/booking/1705 
+ path_url=/booking/1705 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept': '*/*', 'Connection': 'keep-alive', 'Cookie': 'token=2948bdf3fb2aa79', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-09-22T15:14:09.230542" level="INFO">DELETE Response : url=https://restful-booker.herokuapp.com/booking/1705 
+ status=405, reason=Method Not Allowed 
+ headers={'Content-Length': '18', 'Content-Type': 'text/plain; charset=utf-8', 'Date': 'Mon, 22 Sep 2025 18:14:09 GMT', 'Etag': 'W/"12-UGJMK66P4abaBlq0vKHJaCKuGCA"', 'Nel': '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}', 'Report-To': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1758564849"}],"max_age":3600}', 'Reporting-Endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=SNWkB5wZafemcRvldzcNE90kfwx4zj4dXBNUrkSQAsU%3D&amp;sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&amp;ts=1758564849"', 'Server': 'Heroku', 'Via': '1.1 heroku-router', 'X-Powered-By': 'Express'} 
+ body=Method Not Allowed 
+ </msg>
+<msg time="2025-09-22T15:14:09.230542" level="INFO">C:\Users\raphael\anaconda3\Lib\site-packages\urllib3\connectionpool.py:1099: InsecureRequestWarning: Unverified HTTPS request is being made to host 'restful-booker.herokuapp.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-09-22T15:14:09.231627" level="INFO">${response} = &lt;Response [405]&gt;</msg>
+<var>${response}</var>
+<arg>api</arg>
+<arg>${ENDPOINT}/${booking_id}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-09-22T15:14:09.119901" elapsed="0.111726"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-09-22T15:14:09.232070" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>405</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-09-22T15:14:09.232070" elapsed="0.000000"/>
+</kw>
+<tag>delete</tag>
+<tag>edge</tag>
+<status status="PASS" start="2025-09-22T15:14:08.782483" elapsed="0.449587"/>
+</test>
+<kw name="Delete All Sessions" owner="RequestsLibrary" type="TEARDOWN">
+<msg time="2025-09-22T15:14:09.233565" level="INFO">Deleting All Sessions</msg>
+<doc>Removes all the session objects</doc>
+<status status="PASS" start="2025-09-22T15:14:09.233565" elapsed="0.000000"/>
+</kw>
+<doc>Delete Booking Tests</doc>
+<status status="PASS" start="2025-09-22T15:14:06.768398" elapsed="2.465167"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="5" fail="0" skip="0">delete</stat>
+<stat pass="1" fail="0" skip="0">edge</stat>
+<stat pass="3" fail="0" skip="0">negative</stat>
+<stat pass="1" fail="0" skip="0">positive</stat>
+</tag>
+<suite>
+<stat name="Delete Booking" id="s1" pass="5" fail="0" skip="0">Delete Booking</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2025-09-22T15:14:06.768398" level="WARN">Error in file 'C:\Users\raphael\Documents\GitHub\learn\Compass\Test_heroku_robot_Framerwork\tests\delete_booking.robot' on line 74: The '[Return]' setting is deprecated. Use the 'RETURN' statement instead.</msg>
+<msg time="2025-09-22T15:14:06.768398" level="WARN">Error in file 'C:\Users\raphael\Documents\GitHub\learn\Compass\Test_heroku_robot_Framerwork\tests\delete_booking.robot' on line 79: The '[Return]' setting is deprecated. Use the 'RETURN' statement instead.</msg>
+</errors>
+</robot>
